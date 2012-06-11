@@ -31,6 +31,10 @@ void sha1_init( SHA1_CONTEXT *hd )
     hd->nblocks = 0;
     hd->count = 0;
 }
+void sha1sum(SHA1_CONTEXT *hd)
+{
+
+}
 
 void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
 {
@@ -42,7 +46,7 @@ void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH] = 0x80000000;
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+1] = 0x00000000;
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+2] = 0x00000000;
-    hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+3] = (4+8)*32;
+    hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+3] = (INPUT_DATA_LENGTH+KEY_LENGTH)*32;
     for(i=0; i< TOTAL_DATA_LENGTH; i++)
     {
         printf("0x%08x   ",hd->buf[i]);
@@ -54,21 +58,22 @@ void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
 
 int main(int argc, char **argv)
 {
-    if(argc != 5){
+    if(argc != INPUT_DATA_LENGTH+1){
         printf("Useage: sha1_one_blck data1 date2 data3 data4 \n");
         return -1;
     }
-    unsigned int input_data[4];// = atoi(argv[1]);
+    unsigned int input_data[INPUT_DATA_LENGTH];// = atoi(argv[1]);
     int i = 0;
-    for(i = 1 ; i < 5; i++)
-        input_data[i-1] = atoi(argv[i]);
+    for(i = 0 ; i < INPUT_DATA_LENGTH; i++)
+        input_data[i] = atoi(argv[i+1]);
     printf("sizeof unsigned int is %d sizeof long is %d sizeof long long is %d\n",sizeof(int),sizeof(long),sizeof(long long));
-    for(i = 0 ; i < 4; i++)
+    for(i = 0 ; i < INPUT_DATA_LENGTH; i++)
         printf("%8d --",input_data[i]);
     printf("\n");
     SHA1_CONTEXT hd;
     sha1_init(&hd);
     create_sha1_buf(&hd,&input_data[0],&key[0]);
+    sha1sum(&hd);
     return 1;
 }
 
