@@ -13,7 +13,7 @@
 #define dprintf 
 
 #define TOTAL_DATA_LENGTH 80
-#define INPUT_DATA_LENGTH 4
+#define INPUT_DATA_LENGTH 1
 #define KEY_LENGTH 8
 
 typedef struct {
@@ -114,7 +114,7 @@ void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
 int main(int argc, char **argv)
 {
     if(argc != INPUT_DATA_LENGTH+1){
-        printf("Useage: sha1_one_blck data1 date2 data3 data4 \n");
+        printf("Useage: sha1_one_blck data1 \n");
         return -1;
     }
     unsigned int input_data[INPUT_DATA_LENGTH];// = atoi(argv[1]);
