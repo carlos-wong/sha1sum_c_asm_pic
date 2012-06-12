@@ -8,7 +8,9 @@
 
 #include <stdio.h>
 
-#define TOTAL_DATA_LENGTH 16
+#define rol(x,n) ( ((x) << (n)) | ((x) >> (32-(n))) )
+
+#define TOTAL_DATA_LENGTH 80
 #define INPUT_DATA_LENGTH 4
 #define KEY_LENGTH 8
 
@@ -18,6 +20,7 @@ typedef struct {
     unsigned int buf[TOTAL_DATA_LENGTH];
     int  count;
 } SHA1_CONTEXT;
+
 
 unsigned int key[KEY_LENGTH]={'1','2','3','4','5','6','7','8'};
 
@@ -33,7 +36,49 @@ void sha1_init( SHA1_CONTEXT *hd )
 }
 void sha1sum(SHA1_CONTEXT *hd)
 {
-
+    int i = 0;
+    unsigned int a=hd->h0;
+    unsigned int b=hd->h1;
+    unsigned int c=hd->h2;
+    unsigned int d=hd->h3;
+    unsigned int e=hd->h4;
+    unsigned int f=0;
+    unsigned int k=0;
+    unsigned int temp = 0;
+    for(i=0; i< TOTAL_DATA_LENGTH; i++)
+    {
+        if(i >=0 && i <=19)
+        {
+            f = (b&c)|((!b)&d);
+            k = 0x5A827999;
+        }
+        if(i >=20 && i <=39)
+        {
+            f = b ^ c ^ d;
+            k = 0x6ED9EBA1;
+        }
+        if(i >=40 && i <=59)
+        {
+            f = (b & c) | (b & d) | (c & d);
+            k = 0x8F1BBCDC;
+        }
+        if(i >=60 && i <=79)
+        {
+            f = b ^ c ^ d;
+            k = 0xCA62C1D6;
+        }
+        temp = (rol(a,5)) + f + e + k + hd->buf[i];
+        e = d;
+        d = c;
+        c = rol(b,30);
+        b = a;
+        a = temp;
+    }
+    printf("h0 is 0x%08x\n",hd->h0+a);
+    printf("h1 is 0x%08x\n",hd->h1+b);
+    printf("h2 is 0x%08x\n",hd->h2+c);
+    printf("h3 is 0x%08x\n",hd->h3+d);
+    printf("h4 is 0x%08x\n",hd->h4+e);
 }
 
 void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
@@ -47,6 +92,14 @@ void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+1] = 0x00000000;
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+2] = 0x00000000;
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+3] = (INPUT_DATA_LENGTH+KEY_LENGTH)*32;
+    unsigned int temp = 0;
+    //cal 16-79 buff
+    for(i = INPUT_DATA_LENGTH+KEY_LENGTH+4; i < TOTAL_DATA_LENGTH; i++)
+    {
+        temp = (hd->buf[i-3] ^ hd->buf[i-8] ^ hd->buf[i-14] ^ hd->buf[i-16]);
+        hd->buf[i] = rol(temp,1);
+    }
+
     for(i=0; i< TOTAL_DATA_LENGTH; i++)
     {
         printf("0x%08x   ",hd->buf[i]);
