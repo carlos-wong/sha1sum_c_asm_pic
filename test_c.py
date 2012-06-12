@@ -12,9 +12,29 @@ def run_sys_command(command):
     sys.exit()
   return output_file
 
-
-result = run_sys_command("./sha1 10 20 30 40")
-reslut = result.split("\n")
-print  reslut
-for enum in reslut:
-  print enum
+i = 0
+a = 0
+b = 0
+c = 0
+d = 0
+while a <= 0xffffffff:
+  print "step a is ",a
+  b = 0
+  while b <= 0xffffffff:
+    c = 0
+    while c <= 0xffffffff:
+      d = 0
+      while d <= 0xffffffff:
+        command = "./sha1 %d %d %d %d"%(a,b,c,d)
+        print command
+        result = run_sys_command(command)
+        d = d + 1
+      c = c +1
+    b = b + 1
+  a = a+1
+#reslut = result.split("\n")
+#temp = 0
+#for enum in reslut:
+#  print enum,"atoi is %x"%(int(enum,16))
+#  temp = temp + int(enum,16)
+#print temp
