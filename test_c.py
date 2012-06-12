@@ -18,19 +18,9 @@ b = 0
 c = 0
 d = 0
 while a <= 0xffffffff:
-  print "step a is ",a
-  b = 0
-  while b <= 0xffffffff:
-    c = 0
-    while c <= 0xffffffff:
-      d = 0
-      while d <= 0xffffffff:
-        command = "./sha1 %d %d %d %d"%(a,b,c,d)
-        print command
-        result = run_sys_command(command)
-        d = d + 1
-      c = c +1
-    b = b + 1
+  command = "./sha1 %d"%(a)
+  print command
+  result = run_sys_command(command)
   a = a+1
 #reslut = result.split("\n")
 #temp = 0
