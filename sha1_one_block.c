@@ -10,6 +10,8 @@
 
 #define rol(x,n) ( ((x) << (n)) | ((x) >> (32-(n))) )
 
+#define dprintf 
+
 #define TOTAL_DATA_LENGTH 80
 #define INPUT_DATA_LENGTH 4
 #define KEY_LENGTH 8
@@ -74,11 +76,11 @@ void sha1sum(SHA1_CONTEXT *hd)
         b = a;
         a = temp;
     }
-    printf("h0 is 0x%08x\n",hd->h0+a);
-    printf("h1 is 0x%08x\n",hd->h1+b);
-    printf("h2 is 0x%08x\n",hd->h2+c);
-    printf("h3 is 0x%08x\n",hd->h3+d);
-    printf("h4 is 0x%08x\n",hd->h4+e);
+    printf("0x%08x\n",hd->h0+a);
+    printf("0x%08x\n",hd->h1+b);
+    printf("0x%08x\n",hd->h2+c);
+    printf("0x%08x\n",hd->h3+d);
+    printf("0x%08x\n",hd->h4+e);
 }
 
 void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
@@ -102,11 +104,11 @@ void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
 
     for(i=0; i< TOTAL_DATA_LENGTH; i++)
     {
-        printf("0x%08x   ",hd->buf[i]);
+        dprintf("0x%08x   ",hd->buf[i]);
         if((i+1)%4 == 0)
-            printf("\n");
+            dprintf("\n");
     }
-    printf("\n");
+    dprintf("\n");
 }
 
 int main(int argc, char **argv)
@@ -119,14 +121,14 @@ int main(int argc, char **argv)
     int i = 0;
     for(i = 0 ; i < INPUT_DATA_LENGTH; i++)
         input_data[i] = atoi(argv[i+1]);
-    printf("sizeof unsigned int is %d sizeof long is %d sizeof long long is %d\n",sizeof(int),sizeof(long),sizeof(long long));
+    dprintf("sizeof unsigned int is %d sizeof long is %d sizeof long long is %d\n",sizeof(int),sizeof(long),sizeof(long long));
     for(i = 0 ; i < INPUT_DATA_LENGTH; i++)
-        printf("%8d --",input_data[i]);
-    printf("\n");
+        dprintf("%8d --",input_data[i]);
+    dprintf("\n");
     SHA1_CONTEXT hd;
     sha1_init(&hd);
     create_sha1_buf(&hd,&input_data[0],&key[0]);
     sha1sum(&hd);
-    return 1;
+    return 0;
 }
 
