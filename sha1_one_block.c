@@ -86,10 +86,11 @@ void sha1sum(SHA1_CONTEXT *hd)
 void create_sha1_buf(SHA1_CONTEXT *hd, unsigned int *data,unsigned int *key)
 {
     int i = 0;//data_length;
-    for(i = 0; i < INPUT_DATA_LENGTH; i++)
-        hd->buf[i] = *data++;
     for(i = 0; i < KEY_LENGTH; i++)
-        hd->buf[i+INPUT_DATA_LENGTH] = key[i];
+        hd->buf[i] = key[i];
+    for(i = 0; i < INPUT_DATA_LENGTH; i++)
+        hd->buf[i+KEY_LENGTH] = *data++;
+
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH] = 0x80000000;
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+1] = 0x00000000;
     hd->buf[INPUT_DATA_LENGTH+KEY_LENGTH+2] = 0x00000000;

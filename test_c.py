@@ -43,8 +43,9 @@ while a <= 0xffff:
     data_list[i:] = [temp]
 i = 0
 for enum_data in data_list:
-  print enum_data
-  print cal[i]
+  if cal[i] > 1:
+    print enum_data
+    print cal[i]
   i = i + 1
 
 
