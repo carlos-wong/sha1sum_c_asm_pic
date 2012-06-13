@@ -17,14 +17,34 @@ a = 0
 b = 0
 c = 0
 d = 0
-while a <= 0xffffffff:
+data_list = [0]
+cal = [0]
+
+while a <= 0xffff:
   command = "./sha1 %d"%(a)
-  print command
+  if a%300 == 0:
+    print command
   result = run_sys_command(command)
   a = a+1
-#reslut = result.split("\n")
-#temp = 0
-#for enum in reslut:
-#  print enum,"atoi is %x"%(int(enum,16))
-#  temp = temp + int(enum,16)
-#print temp
+  reslut = result.split("\n")
+  temp = 0
+  for enum in reslut:
+    temp = temp + int(enum,16)
+  i = 0
+  get_data = 0
+  for enum_data in data_list:
+    if temp == enum_data:
+      cal[i] = cal[i]+1
+      get_data = 1
+      break
+    i = i + 1
+  if get_data == 0:
+    cal[i:] = [1]
+    data_list[i:] = [temp]
+i = 0
+for enum_data in data_list:
+  print enum_data
+  print cal[i]
+  i = i + 1
+
+
